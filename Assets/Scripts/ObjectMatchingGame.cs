@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(LineRenderer))]
@@ -17,6 +14,7 @@ public class ObjectMatchingGame : MonoBehaviour
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 2;
+
     }
 
     private void Update()
@@ -29,14 +27,15 @@ public class ObjectMatchingGame : MonoBehaviour
                 isDragging = true;
                 Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 mousePosition.z = 0f;
-                lineRenderer.SetPosition(0, mousePosition);
+                lineRenderer.SetPosition(index: 0, mousePosition);
             }
         }
+
         if (isDragging)
         {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePosition = Camera.main.ScreenToViewportPoint(Input.mousePosition);
             mousePosition.z = 0f;
-            lineRenderer.SetPosition(1, mousePosition);
+            lineRenderer.SetPosition(index: 1, mousePosition);
             endPoint = mousePosition;
         }
 
@@ -46,7 +45,7 @@ public class ObjectMatchingGame : MonoBehaviour
             RaycastHit2D hit = Physics2D.Raycast(endPoint, Vector2.zero);
             if (hit.collider != null && hit.collider.TryGetComponent(out objectMatchForm) && matchId == objectMatchForm.Get_ID())
             {
-                Debug.Log("Correct Form!");
+                Debug.Log(message: "Correct Form!");
                 this.enabled = false;
             }
             else
